@@ -80,6 +80,6 @@ public class PlayerMove : MonoBehaviourPun
                 Vector3.Lerp(CharTarget.position + CharTarget.forward,
                 CharTarget.position + CamCoordToWorldCoord_Dir, 0.5f)
             );
-        CharTarget.position += CamCoordToWorldCoord_Dir * (1 + Speed) * Time.deltaTime;
+        CharTarget.position += CamCoordToWorldCoord_Dir * (1 + Speed *10) * Time.deltaTime;
     }
 }

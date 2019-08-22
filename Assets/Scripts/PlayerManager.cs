@@ -5,18 +5,17 @@ using Photon.Pun;
 
 public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 {
-    [Tooltip("The Player's UI GameObject Prefab")]
-    [SerializeField]
-    private GameObject playerUiPrefab;
-
-    public static GameObject LocalPlayerInstance;
-
     public HpUI hpui;
     public SpUI spui;
     public float PlayerHp = 100;
     public float PlayerSp = 100;
 
     #region Photon部份
+    [Tooltip("The Player's UI GameObject Prefab")]
+    [SerializeField]
+    private GameObject playerUiPrefab;
+
+    public static GameObject LocalPlayerInstance;
 
     public GameObject PlayerMainCamera;
     public GameObject PlayerFreeCamera;

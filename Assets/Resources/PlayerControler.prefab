@@ -2569,6 +2569,7 @@ MonoBehaviour:
   Shield: {fileID: 344149807350295433}
   Sword: {fileID: 344149808578493648}
   sword: {fileID: 344149808620622678}
+  SwordTeam: {fileID: 344149808578493650}
   Laying: 0
   isAction: 0
   isInvincible: 0
@@ -2696,11 +2697,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dbdc7a9ae22d0041b40cb50b59e6dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUiPrefab: {fileID: 170056, guid: 65884676a368662439c4ff905cd0a19f, type: 3}
   hpui: {fileID: 9040649255189010312}
   spui: {fileID: 9040649255698022174}
   PlayerHp: 100
   PlayerSp: 100
+  playerUiPrefab: {fileID: 170056, guid: 65884676a368662439c4ff905cd0a19f, type: 3}
   PlayerMainCamera: {fileID: 344149807113461497}
   PlayerFreeCamera: {fileID: 344149807478517224}
   PlayerUI: {fileID: 9040649256480969155}

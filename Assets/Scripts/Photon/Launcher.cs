@@ -10,7 +10,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
+
 using Photon.Realtime;
 
 namespace Photon.Pun.Demo.PunBasics
@@ -158,7 +158,7 @@ namespace Photon.Pun.Demo.PunBasics
                 LogFeedback("OnConnectedToMaster: Next -> try to Join Random Room");
                 Debug.Log("PUN Basics Tutorial/Launcher: OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room.\n Calling: PhotonNetwork.JoinRandomRoom(); Operation will fail if no room found");
 
-                // #Critical: 我們首先要做的是加入潛在的現有房間。 如果有，那麼好，否則我們將被OnJoinRandomFailed（）回調
+                // #Critical: The first we try to do is to join a potential existing room. If there is, good, else, we'll be called back with OnJoinRandomFailed()
                 PhotonNetwork.JoinRandomRoom();
             }
         }
@@ -174,7 +174,7 @@ namespace Photon.Pun.Demo.PunBasics
             LogFeedback("<Color=Red>OnJoinRandomFailed</Color>: Next -> Create a new Room");
             Debug.Log("PUN Basics Tutorial/Launcher:OnJoinRandomFailed() was called by PUN. No random room available, so we create one.\nCalling: PhotonNetwork.CreateRoom");
 
-            // #Critical: 我們沒有加入一個隨機的房間，可能沒有，或者他們都滿了。 不用擔心，我們創造了一個新的房間。
+            // #Critical: we failed to join a random room, maybe none exists or they are all full. No worries, we create a new room.
             PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = this.maxPlayersPerRoom });
         }
 
@@ -187,7 +187,7 @@ namespace Photon.Pun.Demo.PunBasics
             LogFeedback("<Color=Red>OnDisconnected</Color> " + cause);
             Debug.LogError("PUN Basics Tutorial/Launcher:Disconnected");
 
-            // #Critical: 我們無法連接或斷開連接。 我們無能為力。 通常，應該有一個UI系統讓用戶嘗試再次連接。
+            // #Critical: we failed to connect or got disconnected. There is not much we can do. Typically, a UI system should be in place to let the user attemp to connect again.
             loaderAnime.StopLoaderAnimation();
 
             isConnecting = false;
@@ -218,7 +218,7 @@ namespace Photon.Pun.Demo.PunBasics
 
                 // #Critical
                 // Load the Room Level. 
-                PhotonNetwork.LoadLevel("Game");
+                PhotonNetwork.LoadLevel(1);
 
             }
         }

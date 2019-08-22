@@ -9,7 +9,7 @@ public class PlayerAnim : MonoBehaviourPun
     private Animator Player_ani;
     private float nowSpeed;
     public BoxCollider Shield, Sword;
-    public GameObject sword;
+    public GameObject sword, SwordTeam;
     public bool Laying;
     public bool isAction, isInvincible;
     public SpUI spui;
@@ -89,27 +89,63 @@ public class PlayerAnim : MonoBehaviourPun
     {
         if (!photonView.IsMine)
             return;
-
-        if (other.CompareTag("Sword") && !isInvincible)
+        if(SwordTeam.tag == "RedPlayer")
         {
-            if (!Shield.enabled)
+            if (other.CompareTag("BluePlayer") && !isInvincible)
             {
-                Player_ani.SetBool("Hurt", true);
-                playerManager.CoHp(10);
-            }
-            else if (Shield.enabled)
-            {
-                playerManager.CoSp(15);
-                
-                if (playerManager.PlayerSp <= 0)
-                {
-                    Player_ani.SetBool("BreakShield", true);
-                }
-                else
+                if (!Shield.enabled)
                 {
                     Player_ani.SetBool("Hurt", true);
+                    playerManager.CoHp(10);
+                }
+                else if (Shield.enabled)
+                {
+                    playerManager.CoSp(15);
+
+                    if (playerManager.PlayerSp <= 0)
+                    {
+                        Player_ani.SetBool("BreakShield", true);
+                    }
+                    else
+                    {
+                        Player_ani.SetBool("Hurt", true);
+                    }
                 }
             }
+        }
+        else if (SwordTeam.tag == "BluePlayer")
+        {
+            if (other.CompareTag("RedPlayer") && !isInvincible)
+            {
+                if (!Shield.enabled)
+                {
+                    Player_ani.SetBool("Hurt", true);
+                    playerManager.CoHp(10);
+                }
+                else if (Shield.enabled)
+                {
+                    playerManager.CoSp(15);
+
+                    if (playerManager.PlayerSp <= 0)
+                    {
+                        Player_ani.SetBool("BreakShield", true);
+                    }
+                    else
+                    {
+                        Player_ani.SetBool("Hurt", true);
+                    }
+                }
+            }
+        }
+        if (other.CompareTag("RedTeam"))
+        {
+            gameObject.transform.position = GameObject.Find("RedTp").GetComponent<Transform>().position;
+            SwordTeam.tag = "RedPlayer";
+        }
+        if (other.CompareTag("BlueTeam"))
+        {
+            gameObject.transform.position = GameObject.Find("BlueTp").GetComponent<Transform>().position;
+            SwordTeam.tag = "BluePlayer";
         }
     }
     public void isActionTrue()
