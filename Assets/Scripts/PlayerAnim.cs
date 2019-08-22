@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
-public class PlayerAnim : MonoBehaviourPun
+public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
 {
     public PlayerManager playerManager;
     private Animator Player_ani;
@@ -13,6 +14,21 @@ public class PlayerAnim : MonoBehaviourPun
     public bool Laying;
     public bool isAction, isInvincible;
     public SpUI spui;
+
+    public Text te;
+
+    void ff(string ss)
+    {
+        // 我們不假設有一個feedbackText定義。
+        if (te == null)
+        {
+            return;
+        }
+
+        // 將新消息添加為新行並位於日誌底部。
+        te.text += System.Environment.NewLine + ss;
+    }
+
 
     void Start()
     {
@@ -27,6 +43,13 @@ public class PlayerAnim : MonoBehaviourPun
             Player_ani.applyRootMotion = false;
             return;
         }
+        else
+        {
+            SwordTeam.SetActive(false);
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+            te.text = "";
+
         #endregion
         if (Input.GetMouseButton(1))
         {
@@ -89,12 +112,14 @@ public class PlayerAnim : MonoBehaviourPun
     {
         if (!photonView.IsMine)
             return;
-        if(SwordTeam.tag == "RedPlayer")
+        ff("碰到trigger");
+        if (SwordTeam.tag == "RedPlayer")
         {
             if (other.CompareTag("BluePlayer") && !isInvincible)
             {
                 if (!Shield.enabled)
                 {
+                    ff("打到紅隊玩家");
                     Player_ani.SetBool("Hurt", true);
                     playerManager.CoHp(10);
                 }
@@ -119,6 +144,7 @@ public class PlayerAnim : MonoBehaviourPun
             {
                 if (!Shield.enabled)
                 {
+                    ff("打到藍隊玩家");
                     Player_ani.SetBool("Hurt", true);
                     playerManager.CoHp(10);
                 }
@@ -139,15 +165,38 @@ public class PlayerAnim : MonoBehaviourPun
         }
         if (other.CompareTag("RedTeam"))
         {
-            gameObject.transform.position = GameObject.Find("RedTp").GetComponent<Transform>().position;
             SwordTeam.tag = "RedPlayer";
+            gameObject.tag = "RedPlayer";
+            ff("加入紅隊");
+            gameObject.transform.position = GameObject.Find("RedTp").GetComponent<Transform>().position;
         }
         if (other.CompareTag("BlueTeam"))
         {
-            gameObject.transform.position = GameObject.Find("BlueTp").GetComponent<Transform>().position;
             SwordTeam.tag = "BluePlayer";
+            gameObject.tag = "BluePlayer";
+            ff("加入藍隊");
+            gameObject.transform.position = GameObject.Find("BlueTp").GetComponent<Transform>().position;
         }
     }
+    #region IPunObservable implementation  Photon部分
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(this.tag);
+            stream.SendNext(SwordTeam.tag);
+
+        }
+        else
+        {
+            this.tag = (string)stream.ReceiveNext();
+            SwordTeam.tag = (string)stream.ReceiveNext();
+        }
+    }
+
+    #endregion
+
     public void isActionTrue()
     {
         isAction = true;

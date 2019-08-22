@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Update()
     {
         //Esc離開遊戲
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.F12))
         {
             QuitApplication();
         }
