@@ -12,6 +12,8 @@ TagManager:
   - BlueTeam
   - BlueSword
   - RedSword
+  - BlueBigSword
+  - RedBigSword
   layers:
   - Default
   - TransparentFX

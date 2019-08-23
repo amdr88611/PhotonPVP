@@ -88,10 +88,6 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             Player_ani.SetBool("Throw", true);
         }
         /*
-        if() 被打倒時
-        {
-            Player_ani.SetBool("KnockDown", true);
-        }
         if (Laying)
         {
             //if() 被處決決判時
@@ -121,13 +117,35 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             {
                 if (!Shield.enabled)
                 {
-                    ff("打到紅隊玩家");
+                    ff("被籃隊打到");
                     Player_ani.SetBool("Hurt", true);
                     playerManager.CoHp(10);
                 }
                 else if (Shield.enabled)
                 {
                     playerManager.CoSp(15);
+
+                    if (playerManager.PlayerSp <= 0)
+                    {
+                        Player_ani.SetBool("BreakShield", true);
+                    }
+                    else
+                    {
+                        Player_ani.SetBool("Hurt", true);
+                    }
+                }
+            }
+            else if (other.CompareTag("BlueBigSword") && !isInvincible)
+            {
+                if (!Shield.enabled)
+                {
+                    ff("被籃隊重攻擊打到");
+                    Player_ani.SetBool("KnockDown", true);
+                    playerManager.CoHp(20);
+                }
+                else if (Shield.enabled)
+                {
+                    playerManager.CoSp(30);
 
                     if (playerManager.PlayerSp <= 0)
                     {
@@ -146,13 +164,35 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             {
                 if (!Shield.enabled)
                 {
-                    ff("打到藍隊玩家");
+                    ff("被紅隊打到");
                     Player_ani.SetBool("Hurt", true);
                     playerManager.CoHp(10);
                 }
                 else if (Shield.enabled)
                 {
                     playerManager.CoSp(15);
+
+                    if (playerManager.PlayerSp <= 0)
+                    {
+                        Player_ani.SetBool("BreakShield", true);
+                    }
+                    else
+                    {
+                        Player_ani.SetBool("Hurt", true);
+                    }
+                }
+            }
+            else if (other.CompareTag("RedBigSword") && !isInvincible)
+            {
+                if (!Shield.enabled)
+                {
+                    ff("被紅隊重攻擊打到");
+                    Player_ani.SetBool("KnockDown", true);
+                    playerManager.CoHp(20);
+                }
+                else if (Shield.enabled)
+                {
+                    playerManager.CoSp(30);
 
                     if (playerManager.PlayerSp <= 0)
                     {
@@ -211,11 +251,27 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void ComboSp()
     {
+        if (SwordTeam.tag.Contains("Blue"))
+        {
+            SwordTeam.tag = "BlueSword";
+        }
+        else if (SwordTeam.tag.Contains("Red"))
+        {
+            SwordTeam.tag = "RedSword";
+        }
         isActionTrue();
         playerManager.CoSp(10);
     }
     public void HeavyAttackSp()
     {
+        if (SwordTeam.tag.Contains("Blue"))
+        {
+            SwordTeam.tag = "BlueBigSword";
+        }
+        else if (SwordTeam.tag.Contains("Red"))
+        {
+            SwordTeam.tag = "RedBigSword";
+        }
         playerManager.CoSp(50);
     }
     public void AttackFalse()
