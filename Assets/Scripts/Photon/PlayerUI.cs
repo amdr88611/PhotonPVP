@@ -18,7 +18,7 @@ using Photon.Pun;
 /// Player UI. Constraint the UI to follow a PlayerManager GameObject in the world,
 /// Affect a slider and text to display Player's name and health
 /// </summary>
-public class PlayerUI : MonoBehaviourPunCallbacks, IPunObservable
+public class PlayerUI : MonoBehaviourPun
 {
     #region Private Fields
     public static PlayerUI Instance;
@@ -138,25 +138,6 @@ public class PlayerUI : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
     
-
-    #endregion
-    #region IPunObservable implementation  Photon部分
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-           /* stream.SendNext(playerNameText.color.r);
-            stream.SendNext(playerNameText.color.g);
-            stream.SendNext(playerNameText.color.b);*/
-        }
-        else
-        {
-         /*   playerNameText.color.r = (float)stream.ReceiveNext();
-            playerNameText.color.g = (float)stream.ReceiveNext();
-            playerNameText.color.b = (float)stream.ReceiveNext();*/
-        }
-    }
 
     #endregion
 }

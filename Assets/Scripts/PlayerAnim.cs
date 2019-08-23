@@ -175,7 +175,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (other.CompareTag("BlueTeam"))
         {
-            GameObject.Find("PlayerUI " + PhotonNetwork.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(0, 0,255);
+            GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(0, 0,255);
             SwordTeam.tag = "BlueSword";
             gameObject.tag = "BluePlayer";
             ff("加入藍隊");
@@ -190,11 +190,16 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         {
             stream.SendNext(this.tag);
             stream.SendNext(SwordTeam.tag);
+            stream.SendNext(GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color.r);
+            stream.SendNext(GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color.g);
+            stream.SendNext(GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color.b);
         }
         else
         {
             this.tag = (string)stream.ReceiveNext();
             SwordTeam.tag = (string)stream.ReceiveNext();
+            GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+
         }
     }
 
