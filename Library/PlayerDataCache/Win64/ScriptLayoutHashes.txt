@@ -1,6 +1,6 @@
 Win64
 PlayerPath?
-C:/Users/Intern/Desktop/範例測試/PhotonPVP.exe
+V:/108-育達-多遊-陳廷岳/Test/PhotonPVP.exe
 SceneListBegin?
 Assets/Scenes/Start.unity
 Assets/Scenes/Game.unity
@@ -213,7 +213,7 @@ e1e615eaf73e560828f53edc8952e615 PhotonUnityNetworking.Utilities.dll:Photon.Pun.
 fb6a1ea36b4f6ef5948d283d93760765 UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioRoom
 5b0391b7e3d9ea9db6c0a8fbd0ca23f6 UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioSoundfieldExtension
 5b0391b7e3d9ea9db6c0a8fbd0ca23f6 UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioSourceExtension
-ba3e4c7275bfdf70202000d5594974d6 Assembly-CSharp.dll:Photon.Pun.Demo.PunBasics.PlayerUI
+36f19ad10b95efbe511c4be02f9c8c16 Assembly-CSharp.dll:.PlayerUI
 6225eb0973ab0af667bc5f9d1b1b18de Cinemachine.dll:Cinemachine.CinemachineCollider
 bd50beb95120324d8c4e8386692b6e82 Cinemachine.dll:Cinemachine.CinemachineBlenderSettings
 c0201dbecd85f700bcdff493a272631d Cinemachine.dll:Cinemachine.CinemachineImpulseSource

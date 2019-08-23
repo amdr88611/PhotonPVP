@@ -47,7 +47,7 @@ public class SpUI : MonoBehaviour
         {
             if (!player.isAction)
             {
-                SPHealthBar.sizeDelta += SPSlowBar * 1.5f * Slow;
+                SPHealthBar.sizeDelta += SPSlowBar * 3 * Slow;
                 playerManager.PlayerSp = SPHealthBar.sizeDelta.x;
                 if (SPHealthBar.sizeDelta.x > maxSP)
                 {

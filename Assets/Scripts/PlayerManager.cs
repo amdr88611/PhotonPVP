@@ -11,12 +11,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     public float PlayerSp = 100;
 
     #region Photon部份
-    [Tooltip("The Player's UI GameObject Prefab")]
-    [SerializeField]
-    private GameObject playerUiPrefab;
-
+    public GameObject playerUiPrefab;
     public static GameObject LocalPlayerInstance;
-
     public GameObject PlayerMainCamera;
     public GameObject PlayerFreeCamera;
     public GameObject PlayerUI;

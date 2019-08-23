@@ -111,11 +111,13 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     private void OnTriggerEnter(Collider other)
     {
         if (!photonView.IsMine)
-            return;
-        ff("碰到trigger");
-        if (SwordTeam.tag == "RedPlayer")
         {
-            if (other.CompareTag("BluePlayer") && !isInvincible)
+            return;
+        }
+        ff("碰到trigger");
+        if (gameObject.tag == "RedPlayer")
+        {
+            if (other.CompareTag("BlueSword") && !isInvincible)
             {
                 if (!Shield.enabled)
                 {
@@ -138,9 +140,9 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
                 }
             }
         }
-        else if (SwordTeam.tag == "BluePlayer")
+        else if (gameObject.tag == "BluePlayer")
         {
-            if (other.CompareTag("RedPlayer") && !isInvincible)
+            if (other.CompareTag("RedSword") && !isInvincible)
             {
                 if (!Shield.enabled)
                 {
@@ -165,14 +167,16 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (other.CompareTag("RedTeam"))
         {
-            SwordTeam.tag = "RedPlayer";
+            GameObject.Find("PlayerUI " + playerManager.photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(255, 0, 0);
+            SwordTeam.tag = "RedSword";
             gameObject.tag = "RedPlayer";
             ff("加入紅隊");
             gameObject.transform.position = GameObject.Find("RedTp").GetComponent<Transform>().position;
         }
         if (other.CompareTag("BlueTeam"))
         {
-            SwordTeam.tag = "BluePlayer";
+            GameObject.Find("PlayerUI " + PhotonNetwork.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(0, 0,255);
+            SwordTeam.tag = "BlueSword";
             gameObject.tag = "BluePlayer";
             ff("加入藍隊");
             gameObject.transform.position = GameObject.Find("BlueTp").GetComponent<Transform>().position;
@@ -186,7 +190,6 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         {
             stream.SendNext(this.tag);
             stream.SendNext(SwordTeam.tag);
-
         }
         else
         {
