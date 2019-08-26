@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4494890946377948375}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,3 +45,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 344149806709141875, guid: b22fa9fa2705fcf45a1a076774783ede,
     type: 3}
+  DoorAnim: {fileID: 0}
+  ttt: {fileID: 0}
+  playerNumber: 0
+  playerReady: 0
+  RedTeamNumber: 0
+  BlueTeamNumber: 0
+  isStartGame: 0

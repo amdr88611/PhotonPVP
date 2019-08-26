@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
 {
     public PlayerManager playerManager;
+    private GameManager GameManager;
     public Animator Player_ani;
     private float nowSpeed;
     public BoxCollider Shield, Sword;
@@ -16,6 +17,9 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     public SpUI spui;
 
     public Text te;
+    public Text ReadyButtonText;
+    public bool isReady;
+
 
     void ff(string ss)
     {
@@ -32,6 +36,8 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
 
     void Start()
     {
+        ReadyButtonText = GameObject.Find("ReadyButton").GetComponentInChildren<Text>();
+        GameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         Laying = false;
     }
     void FixedUpdate()
@@ -86,6 +92,38 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Player_ani.SetBool("Throw", true);
+        }
+        if (Input.GetKeyDown(KeyCode.F1) && !GameManager.isStartGame)
+        {
+            if (gameObject.tag == "RedPlayer")
+            {
+                GameManager.RedTeamNumber--;
+            }
+            if (gameObject.tag == "BluePlayer")
+            {
+                GameManager.BlueTeamNumber--;
+            }
+            GameObject.Find("PlayerUI " + playerManager.photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(255, 255, 255);
+            gameObject.transform.position = GameObject.Find("StartTp").GetComponent<Transform>().position;
+            SwordTeam.tag = "Sword";
+            gameObject.tag = "Player";
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (!isReady)
+            {
+                GameManager.playerReady++;
+                ReadyButtonText.text = "已就緒(R鍵)";
+                ReadyButtonText.color = Color.red;
+                isReady = !isReady;
+            }
+            else
+            {
+                GameManager.playerReady--;
+                ReadyButtonText.text = "準備(R鍵)";
+                ReadyButtonText.color = Color.black;
+                isReady = !isReady;
+            }
         }
         /*
         if (Laying)
@@ -149,6 +187,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             SwordTeam.tag = "RedSword";
             gameObject.tag = "RedPlayer";
             ff("加入紅隊");
+            GameManager.RedTeamNumber++;
             gameObject.transform.position = GameObject.Find("RedTp").GetComponent<Transform>().position;
         }
         if (other.CompareTag("BlueTeam"))
@@ -157,6 +196,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             SwordTeam.tag = "BlueSword";
             gameObject.tag = "BluePlayer";
             ff("加入藍隊");
+            GameManager.BlueTeamNumber++;
             gameObject.transform.position = GameObject.Find("BlueTp").GetComponent<Transform>().position;
         }
     }
@@ -171,12 +211,19 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color.r);
             stream.SendNext(GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color.g);
             stream.SendNext(GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color.b);
+            stream.SendNext(GameManager.playerReady);
+            stream.SendNext(GameManager.RedTeamNumber);
+            stream.SendNext(GameManager.BlueTeamNumber);
+
         }
         else
         {
             this.tag = (string)stream.ReceiveNext();
             SwordTeam.tag = (string)stream.ReceiveNext();
             GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+            GameManager.playerReady = (int)stream.ReceiveNext();
+            GameManager.RedTeamNumber = (int)stream.ReceiveNext();
+            GameManager.BlueTeamNumber = (int)stream.ReceiveNext();
         }
     }
 

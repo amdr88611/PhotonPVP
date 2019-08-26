@@ -14,6 +14,7 @@ TagManager:
   - RedSword
   - BlueBigSword
   - RedBigSword
+  - GameManager
   layers:
   - Default
   - TransparentFX

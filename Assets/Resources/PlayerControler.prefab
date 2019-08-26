@@ -2563,6 +2563,8 @@ MonoBehaviour:
   isInvincible: 0
   spui: {fileID: 9040649255698022174}
   te: {fileID: 6934553224838894396}
+  ReadyButtonText: {fileID: 0}
+  isReady: 0
 --- !u!114 &6955439287296416659
 MonoBehaviour:
   m_ObjectHideFlags: 0
