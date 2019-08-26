@@ -21,6 +21,7 @@ public class PlayerMove : MonoBehaviourPun
         if (!photonView.IsMine)
             return;
         #endregion
+        Vector3 RelativeDir = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
         if (Player_ani.GetCurrentAnimatorStateInfo(0).fullPathHash == Animator.StringToHash("Base Layer.Walk") ||
           Player_ani.GetNextAnimatorStateInfo(0).fullPathHash == Animator.StringToHash("Base Layer.Walk"))
         {
@@ -44,10 +45,9 @@ public class PlayerMove : MonoBehaviourPun
                     player.isAction = false;
                 }
             }
-            Vector3 RelativeDir = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
             Debug.Log(RelativeDir + "/");
             Debug.Log("Right");
-            CharMove(this.transform, PlayerCamera, RelativeDir, nowSpeed);
+            CharMove(this.transform, PlayerCamera, RelativeDir, nowSpeed,false);
             Player_ani.SetFloat("Speed", nowSpeed);
         }
         else
@@ -66,8 +66,14 @@ public class PlayerMove : MonoBehaviourPun
         {
             Player_ani.SetBool("Walk", false);
         }
+        if(Input.GetKeyDown(KeyCode.Space) && playerManager.PlayerSp >= 20 
+            && Player_ani.GetCurrentAnimatorStateInfo(0).fullPathHash != Animator.StringToHash("Base Layer.Roll")
+            && Player_ani.GetCurrentAnimatorStateInfo(0).fullPathHash != Animator.StringToHash("Base Layer.RollEnd"))
+        {
+            CharMove(this.transform, PlayerCamera, RelativeDir, nowSpeed, true);
+        }
     }
-    void CharMove(Transform CharTarget, Camera Cam, Vector3 Direct, float Speed)
+    public void CharMove(Transform CharTarget, Camera Cam, Vector3 Direct, float Speed,bool IsDoge)
     {
         Vector3 CamForward = Cam.transform.forward;
         Vector3 CamRight = Cam.transform.right;
@@ -75,11 +81,19 @@ public class PlayerMove : MonoBehaviourPun
             Direct.z * CamRight.z + Direct.x * CamForward.z);
         CamCoordToWorldCoord_Dir.Normalize();
         Debug.Log(CamCoordToWorldCoord_Dir);
-        CharTarget.LookAt
+
+        if (!IsDoge)
+        {
+            CharTarget.LookAt
             (
                 Vector3.Lerp(CharTarget.position + CharTarget.forward,
                 CharTarget.position + CamCoordToWorldCoord_Dir, 0.5f)
             );
-        CharTarget.position += CamCoordToWorldCoord_Dir * (3 + Speed * 3) * Time.deltaTime;
+            CharTarget.position += CamCoordToWorldCoord_Dir * (3 + Speed * 3) * Time.deltaTime;
+        }
+        else if (IsDoge)
+        {
+            CharTarget.LookAt(CharTarget.position + CamCoordToWorldCoord_Dir);
+        }
     }
 }
