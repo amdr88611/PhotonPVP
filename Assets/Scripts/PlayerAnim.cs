@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
 {
     public PlayerManager playerManager;
-    private Animator Player_ani;
+    public Animator Player_ani;
     private float nowSpeed;
     public BoxCollider Shield, Sword;
     public GameObject sword, SwordTeam;
@@ -33,7 +33,6 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     void Start()
     {
         Laying = false;
-        Player_ani = GetComponent<Animator>();
     }
     void FixedUpdate()
     {
@@ -57,6 +56,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         }
         else
         {
+            Player_ani.SetBool("Hurt", false);
             Player_ani.SetBool("Blocking", false);
             Player_ani.SetBool("Block", false);
             Shield.enabled = false;
@@ -115,94 +115,32 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (other.CompareTag("BlueSword") && !isInvincible)
             {
-                if (!Shield.enabled)
-                {
-                    ff("被籃隊打到");
-                    Player_ani.SetBool("Hurt", true);
-                    playerManager.CoHp(10);
-                }
-                else if (Shield.enabled)
-                {
-                    playerManager.CoSp(15);
-
-                    if (playerManager.PlayerSp <= 0)
-                    {
-                        Player_ani.SetBool("BreakShield", true);
-                    }
-                    else
-                    {
-                        Player_ani.SetBool("Hurt", true);
-                    }
-                }
+                ff("被籃隊打到");
+                Player_ani.SetBool("Hurt", true);
+                Player_ani.SetBool("Blocking", false);
+                playerManager.CoHp(10);
             }
             else if (other.CompareTag("BlueBigSword") && !isInvincible)
             {
-                if (!Shield.enabled)
-                {
-                    ff("被籃隊重攻擊打到");
-                    Player_ani.SetBool("KnockDown", true);
-                    playerManager.CoHp(20);
-                }
-                else if (Shield.enabled)
-                {
-                    playerManager.CoSp(30);
-
-                    if (playerManager.PlayerSp <= 0)
-                    {
-                        Player_ani.SetBool("BreakShield", true);
-                    }
-                    else
-                    {
-                        Player_ani.SetBool("Hurt", true);
-                    }
-                }
+                ff("被籃隊重攻擊打到");
+                Player_ani.SetBool("KnockDown", true);
+                playerManager.CoHp(20);
             }
         }
         else if (gameObject.tag == "BluePlayer")
         {
             if (other.CompareTag("RedSword") && !isInvincible)
             {
-                if (!Shield.enabled)
-                {
-                    ff("被紅隊打到");
-                    Player_ani.SetBool("Hurt", true);
-                    playerManager.CoHp(10);
-                }
-                else if (Shield.enabled)
-                {
-                    playerManager.CoSp(15);
-
-                    if (playerManager.PlayerSp <= 0)
-                    {
-                        Player_ani.SetBool("BreakShield", true);
-                    }
-                    else
-                    {
-                        Player_ani.SetBool("Hurt", true);
-                    }
-                }
+                ff("被紅隊打到");
+                Player_ani.SetBool("Hurt", true);
+                Player_ani.SetBool("Blocking", false);
+                playerManager.CoHp(10);
             }
             else if (other.CompareTag("RedBigSword") && !isInvincible)
             {
-                if (!Shield.enabled)
-                {
-                    ff("被紅隊重攻擊打到");
-                    Player_ani.SetBool("KnockDown", true);
-                    playerManager.CoHp(20);
-                }
-                else if (Shield.enabled)
-                {
-                    playerManager.CoSp(30);
-
-                    if (playerManager.PlayerSp <= 0)
-                    {
-                        Player_ani.SetBool("BreakShield", true);
-                    }
-                    else
-                    {
-                        Player_ani.SetBool("Hurt", true);
-                    }
-                }
+                ff("被紅隊重攻擊打到");
+                Player_ani.SetBool("KnockDown", true);
+                playerManager.CoHp(20);
             }
         }
         if (other.CompareTag("RedTeam"))
@@ -239,7 +177,6 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             this.tag = (string)stream.ReceiveNext();
             SwordTeam.tag = (string)stream.ReceiveNext();
             GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-
         }
     }
 
@@ -289,6 +226,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void DodgeSp()
     {
+        Shield.enabled = false;
         sword.SetActive(true);
         isInvincible = true;
         playerManager.CoSp(20);
@@ -304,6 +242,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void KnockDownFalse()
     {
+        Player_ani.SetBool("Hurt", false);
         sword.SetActive(true);
         isInvincible = true;
         Player_ani.SetBool("KnockDown", false);
@@ -315,6 +254,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void AllEnd()
     {
+        Player_ani.SetBool("Hurt", false);
         sword.SetActive(true);
         isInvincible = false;
         isAction = false;

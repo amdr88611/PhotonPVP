@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\PlayerAnim.cs" />
     <Compile Include="Assets\Scripts\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\PlayerMove.cs" />
+    <Compile Include="Assets\Scripts\Shield.cs" />
     <Compile Include="Assets\Scripts\SpUI.cs" />
     <Compile Include="Assets\Scripts\TpTeam.cs" />
     <None Include="Assets\Photon\PhotonUnityNetworking\link.xml" />
