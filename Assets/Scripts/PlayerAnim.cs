@@ -16,26 +16,22 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     public bool isAction, isInvincible;
     public SpUI spui;
 
-    public Text te;
-    public Text ReadyButtonText;
-    public bool isReady;
+    Text ReadyButtonText;
+    public GameObject ReadyButton;
+    bool isReady;
 
-    //除錯文字
-    void ff(string ss)
-    {
-        if (te == null)
-            return;
-        te.text += System.Environment.NewLine + ss;
-    }
+
 
     #region Start() Update()
     void Start()
     {
+        ReadyButton = GameObject.Find("ReadyButton");
         ReadyButtonText = GameObject.Find("ReadyButton").GetComponentInChildren<Text>();
         GameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         playerManager = GetComponent<PlayerManager>();
         Player_ani = GetComponent<Animator>();
         Laying = false;
+        ReadyButton.SetActive(false);
     }
     void FixedUpdate()
     {
@@ -49,9 +45,6 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         {
             SwordTeam.SetActive(false);
         }
-        if (Input.GetKeyDown(KeyCode.P))
-            te.text = "";
-
         #endregion
         if (Input.GetMouseButton(1))
         {
@@ -92,6 +85,11 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (Input.GetKeyDown(KeyCode.F1) && !GameManager.isStartGame)
         {
+            ReadyButton.SetActive(false);
+            GameManager.playerReady--;
+            ReadyButtonText.text = "準備(R鍵)";
+            ReadyButtonText.color = Color.black;
+            isReady = !isReady;
             if (gameObject.tag == "RedPlayer")
             {
                 GameManager.RedTeamNumber--;
@@ -148,19 +146,16 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         {
             return;
         }
-        ff("碰到trigger");
         if (gameObject.tag == "RedPlayer")
         {
             if (other.CompareTag("BlueSword") && !isInvincible)
             {
-                ff("被籃隊打到");
                 Player_ani.SetBool("Hurt", true);
                 Player_ani.SetBool("Blocking", false);
                 playerManager.CoHp(10);
             }
             else if (other.CompareTag("BlueBigSword") && !isInvincible)
             {
-                ff("被籃隊重攻擊打到");
                 Player_ani.SetBool("KnockDown", true);
                 playerManager.CoHp(20);
             }
@@ -169,14 +164,12 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (other.CompareTag("RedSword") && !isInvincible)
             {
-                ff("被紅隊打到");
                 Player_ani.SetBool("Hurt", true);
                 Player_ani.SetBool("Blocking", false);
                 playerManager.CoHp(10);
             }
             else if (other.CompareTag("RedBigSword") && !isInvincible)
             {
-                ff("被紅隊重攻擊打到");
                 Player_ani.SetBool("KnockDown", true);
                 playerManager.CoHp(20);
             }
@@ -186,8 +179,8 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             GameObject.Find("PlayerUI " + playerManager.photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(255, 0, 0);
             SwordTeam.tag = "RedSword";
             gameObject.tag = "RedPlayer";
-            ff("加入紅隊");
             GameManager.RedTeamNumber++;
+            ReadyButton.SetActive(true);
             gameObject.transform.position = GameObject.Find("RedTp").GetComponent<Transform>().position;
         }
         if (other.CompareTag("BlueTeam"))
@@ -195,8 +188,8 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(0, 0,255);
             SwordTeam.tag = "BlueSword";
             gameObject.tag = "BluePlayer";
-            ff("加入藍隊");
             GameManager.BlueTeamNumber++;
+            ReadyButton.SetActive(true);
             gameObject.transform.position = GameObject.Find("BlueTp").GetComponent<Transform>().position;
         }
     }

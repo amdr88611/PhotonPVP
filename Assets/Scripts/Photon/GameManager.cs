@@ -20,17 +20,21 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Text ReadyButtonText;
     [Tooltip("玩家的Prefab")]
     [SerializeField]
-    private GameObject playerPrefab;
+    private GameObject playerPrefab = null;
 
-    
+    public GameObject EscMenu;
     public Animator DoorAnim;
-    public Text ttt;
+    public Text RedTeamNumberText;
+    public Text BlueTeamNumberText;
+    public Text NoTeamNumberText;
+
     public int playerNumber;
     public int playerReady;
     public int RedTeamNumber;
     public int BlueTeamNumber;
-    //public bool isReady;
     public bool isStartGame;
+
+    private bool esc;
 
     #endregion
 
@@ -39,14 +43,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Start()
     {
         Instance = this;
-        //ReadyButtonText = GameObject.Find("ReadyButton").GetComponentInChildren<Text>();
         if (!PhotonNetwork.IsConnected)
         {
             SceneManager.LoadScene("Launcher");
             return;
         }
-
-        //生成玩家
         if (playerPrefab == null)
         {
             Debug.LogError("<Color=Red><b>Missing</b></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'", this);
@@ -67,8 +68,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        //ttt.text = "" + isReady + "\n" + "紅隊數量" +RedTeamNumber + "\n" + "藍隊數量" + BlueTeamNumber + "\n" + "準備數量" + playerReady;
         playerNumber = PhotonNetwork.CurrentRoom.PlayerCount;
+        RedTeamNumberText.text = "紅隊："+RedTeamNumber;
+        BlueTeamNumberText.text = "藍隊：" + BlueTeamNumber;
+        NoTeamNumberText.text = "尚未分配隊伍：" + (playerNumber - RedTeamNumber - BlueTeamNumber);
 
         if (playerNumber == playerReady && RedTeamNumber >=1 && BlueTeamNumber >=1)
         {
@@ -80,23 +83,19 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             QuitApplication();
         }
-        /*if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!isReady)
+            if (esc)
             {
-                playerReady++;
-                ReadyButtonText.text = "已就緒(R鍵)";
-                ReadyButtonText.color = Color.red;
-                isReady = !isReady;
+                esc = false;
             }
             else
             {
-                playerReady--;
-                ReadyButtonText.text = "準備(R鍵)";
-                ReadyButtonText.color = Color.black;                
-                isReady = !isReady;
+                esc = true;
             }
-        }*/
+            EscMenu.SetActive(esc);
+        }
+
 
     }
 
@@ -133,42 +132,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Application.Quit();
     }
-    /*public void ReadyButton()
-    {
-        if (!isReady)
-        {
-            playerReady++;
-            ReadyButtonText.text = "已就緒";
-            isReady = !isReady;
-        }
-        else
-        {
-            playerReady--;
-            ReadyButtonText.text = "準備";
-            isReady = !isReady;
-        }
-    }*/
     #endregion
-
-    #region IPunObservable implementation  Photon部分
-    /*
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(playerReady);
-            stream.SendNext(RedTeamNumber);
-            stream.SendNext(BlueTeamNumber);
-        }
-        else
-        {
-            this.playerReady = (int)stream.ReceiveNext();
-            this.RedTeamNumber = (int)stream.ReceiveNext();
-            this.BlueTeamNumber = (int)stream.ReceiveNext();
-        }
-    }
-    */
-    #endregion
-
 }
 
