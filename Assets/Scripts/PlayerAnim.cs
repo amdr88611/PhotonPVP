@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
 {
-    public PlayerManager playerManager;
+    private PlayerManager playerManager;
     private GameManager GameManager;
     public Animator Player_ani;
-    private float nowSpeed;
+
     public BoxCollider Shield, Sword;
     public GameObject sword, SwordTeam;
     public bool Laying;
@@ -20,24 +20,21 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     public Text ReadyButtonText;
     public bool isReady;
 
-
+    //除錯文字
     void ff(string ss)
     {
-        // 我們不假設有一個feedbackText定義。
         if (te == null)
-        {
             return;
-        }
-
-        // 將新消息添加為新行並位於日誌底部。
         te.text += System.Environment.NewLine + ss;
     }
 
-
+    #region Start() Update()
     void Start()
     {
         ReadyButtonText = GameObject.Find("ReadyButton").GetComponentInChildren<Text>();
         GameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        playerManager = GetComponent<PlayerManager>();
+        Player_ani = GetComponent<Animator>();
         Laying = false;
     }
     void FixedUpdate()
@@ -142,6 +139,9 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             Player_ani.SetBool("Dead", true);
         }
     }
+    #endregion
+
+    #region Trigger判定
     private void OnTriggerEnter(Collider other)
     {
         if (!photonView.IsMine)
@@ -200,8 +200,9 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             gameObject.transform.position = GameObject.Find("BlueTp").GetComponent<Transform>().position;
         }
     }
-    #region IPunObservable implementation  Photon部分
+    #endregion
 
+    #region IPunObservable implementation  Photon傳值
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -226,9 +227,9 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             GameManager.BlueTeamNumber = (int)stream.ReceiveNext();
         }
     }
-
     #endregion
 
+    #region 動畫事件
     public void isActionTrue()
     {
         isAction = true;
@@ -349,4 +350,5 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         sword.SetActive(true);
         Player_ani.SetBool("Die", true);
     }
+    #endregion
 }

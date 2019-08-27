@@ -2552,7 +2552,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff30a83ea43cb91419e0397cc1c22577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerManager: {fileID: 3563445543074237976}
   Player_ani: {fileID: 344149808627884254}
   Shield: {fileID: 8595324006843756289}
   Sword: {fileID: 344149808578493648}
