@@ -25,10 +25,10 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - 
-  - 
-  - 
-  - 
+  - RedPlayer
+  - BluePlayer
+  - Obstacles
+  - Player
   - 
   - 
   - 
