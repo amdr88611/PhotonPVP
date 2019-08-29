@@ -13,16 +13,20 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     public Animator Player_ani;
 
     public BoxCollider Shield, Sword;
-    public GameObject sword, SwordTeam;
+    public GameObject sword, SwordTeam, FlySwordPrefab;
     public bool Laying, isAction, isInvincible, cantChangeDir;
     public SpUI spui;
     float movespeed = 6f;
+    
 
     PlayerUI playerUI;
     Text ReadyButtonText;
     Rigidbody rg;
     CapsuleCollider col;
     bool isReady;
+    public bool throwing;
+    private int FlySwordCount;
+    public Transform FlySwordSpawn;
 
     #region Start() Update()
     void Start()
@@ -85,8 +89,9 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             {
                 Player_ani.SetBool("Dodge", true);
             }
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.Q) && throwing == false && FlySwordCount < 3)
             {
+                throwing = true;
                 Player_ani.SetBool("Throw", true);
             }
             if (Input.GetKeyDown(KeyCode.F1) && !GameManager.isStartGame)
@@ -155,6 +160,24 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         {
             Player_ani.SetBool("Dead", true);
         }
+    }
+    public void Fire()
+    {
+        FlySwordCount++;
+        GameObject FlySword = (GameObject)Instantiate(
+             FlySwordPrefab,
+                FlySwordSpawn.position,
+                FlySwordSpawn.rotation);
+
+
+        FlySword.GetComponent<Rigidbody>().velocity = FlySword.transform.forward * 10;
+        if (gameObject.tag == "RedPlayer")
+            FlySword.tag = "RedSword";
+        else if (gameObject.tag == "BluePlayer")
+            FlySword.tag = "BlueSword";
+        Destroy(FlySword, 2.0f);
+
+
     }
     #endregion
 
@@ -325,6 +348,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         DeathAttackFalse();
         Player_ani.SetBool("BeDeathAttack", false);
         Player_ani.SetBool("Throw", false);
+        throwing = false;
     }
     public void Defense()
     {

@@ -2565,6 +2565,7 @@ Transform:
   - {fileID: 344149808620916600}
   - {fileID: 344149808620916598}
   - {fileID: 344149807350295434}
+  - {fileID: 2212547424721458360}
   m_Father: {fileID: 344149806709141874}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2653,11 +2654,15 @@ MonoBehaviour:
   Sword: {fileID: 344149808578493648}
   sword: {fileID: 344149808620622678}
   SwordTeam: {fileID: 344149808578493650}
+  FlySwordPrefab: {fileID: 6805672122963543467, guid: ec91a3f8a5014b34e91bcad2bbfc6edc,
+    type: 3}
   Laying: 0
   isAction: 0
   isInvincible: 0
   cantChangeDir: 0
   spui: {fileID: 9040649255698022174}
+  throwing: 0
+  FlySwordSpawn: {fileID: 2212547424721458360}
 --- !u!114 &6955439287296416659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3889,6 +3894,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TrackingObject: {fileID: 344149808620622676}
+--- !u!1 &1351506475213763778
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2212547424721458360}
+  m_Layer: 12
+  m_Name: FlySwordSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2212547424721458360
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351506475213763778}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.192, y: 1.365, z: 0.84}
+  m_LocalScale: {x: 1, y: 1, z: 1.8774}
+  m_Children: []
+  m_Father: {fileID: 344149808620916596}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2223061652289140753
 GameObject:
   m_ObjectHideFlags: 0
