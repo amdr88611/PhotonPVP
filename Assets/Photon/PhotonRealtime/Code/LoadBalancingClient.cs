@@ -2052,6 +2052,7 @@ namespace Photon.Realtime
             #if !SUPPORTED_UNITY
             Debug.WriteLine(message);
             #else
+            /*
             if (level == DebugLevel.ERROR)
             {
                 Debug.LogError(message);
@@ -2068,6 +2069,7 @@ namespace Photon.Realtime
             {
                 Debug.Log(message);
             }
+            */
             #endif
         }
 
