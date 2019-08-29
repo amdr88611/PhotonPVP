@@ -14,7 +14,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
 
     public BoxCollider Shield, Sword;
     public GameObject sword, SwordTeam, FlySwordPrefab;
-    public bool Laying, isAction, isInvincible, cantChangeDir;
+    public bool Laying, isAction, isInvincible, cantChangeDir,isDead;
     public SpUI spui;
     float movespeed = 6f;
     
@@ -187,9 +187,14 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
                 transform.Translate(Vector3.down * movespeed * Time.deltaTime, Camera.main.transform);
             }
         }
-        if (playerManager.PlayerHp <= 0)
+        if (playerManager.PlayerHp <= 0 && !isDead)
         {
             Player_ani.SetBool("Dead", true);
+            if(gameObject.tag == "RedPlayer")
+                GameManager.photonView.RPC("Number", RpcTarget.All, 3);
+            if (gameObject.tag == "BluePlayer")
+                GameManager.photonView.RPC("Number", RpcTarget.All, 4);
+            isDead = true;
         }
     }
     public void Fire()
@@ -391,7 +396,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         AttackFalse();
         DodgingFalse();
         DeathAttackFalse();
-        Player_ani.SetBool("BeDeathAttack", false);
+        //Player_ani.SetBool("BeDeathAttack", false);
         Player_ani.SetBool("KnockDownIng", false);
         Player_ani.SetBool("Throw", false);
         throwing = false;
@@ -426,7 +431,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     public void StandUp()
     {
         Player_ani.SetBool("Hurt", false);
-        Player_ani.SetBool("BeDeathAttacking", false);
+        //Player_ani.SetBool("BeDeathAttacking", false);
         Laying = false;
     }
     public void Die()

@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     private GameObject playerPrefab = null;
 
     public GameObject EscMenu;
+    public GameObject BlueWinWindows;
+    public GameObject RedWinWindows;
     public Animator DoorAnim;
     public Text RedTeamNumberText;
     public Text BlueTeamNumberText;
@@ -95,8 +97,15 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             }
             EscMenu.SetActive(esc);
         }
-
-
+        if (isStartGame)
+        {
+            if (RedTeamNumber == 0)
+                BlueWinWindows.SetActive(true);
+            if (BlueTeamNumber == 0)
+            {
+                RedWinWindows.SetActive(true);
+            }
+        }
     }
 
     #endregion
@@ -122,15 +131,18 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         PhotonNetwork.LeaveRoom();
     }
-    /*暫時別用 會閃退
+    /*//回閃退
     public override void OnLeftRoom()
     {
         SceneManager.LoadScene(0);
-    }
-    */
+    }*/
     public void QuitApplication()
     {
         Application.Quit();
+    }
+    public void StartGame()
+    {
+        PhotonNetwork.LeaveRoom();
     }
     #endregion
 

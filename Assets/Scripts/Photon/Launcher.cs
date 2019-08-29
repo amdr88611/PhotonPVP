@@ -65,6 +65,9 @@ namespace Photon.Pun.Demo.PunBasics
         /// </summary>
         void Awake()
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
             if (loaderAnime == null)
             {
                 Debug.LogError("<Color=Red><b>Missing</b></Color> loaderAnime Reference.", this);

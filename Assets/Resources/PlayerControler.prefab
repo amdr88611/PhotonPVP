@@ -2660,6 +2660,7 @@ MonoBehaviour:
   isAction: 0
   isInvincible: 0
   cantChangeDir: 0
+  isDead: 0
   spui: {fileID: 9040649255698022174}
   throwing: 0
   FlySwordSpawn: {fileID: 2212547424721458360}
