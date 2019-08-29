@@ -193,15 +193,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.4089636
-        functionName: DodgingFalse
+      - time: 0
+        functionName: StandUp
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.3342246
-        functionName: StandUp
+      - time: 0.4089636
+        functionName: DodgingFalse
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
