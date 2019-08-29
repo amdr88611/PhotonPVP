@@ -5,7 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 
 
-public class GameManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
 
     #region Public Fields
@@ -133,5 +133,47 @@ public class GameManager : MonoBehaviourPunCallbacks
         Application.Quit();
     }
     #endregion
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(playerReady);
+            stream.SendNext(RedTeamNumber);
+            stream.SendNext(BlueTeamNumber);
+        }
+        else
+        {
+            playerReady = (int)stream.ReceiveNext();
+            RedTeamNumber = (int)stream.ReceiveNext();
+            BlueTeamNumber = (int)stream.ReceiveNext();
+        }
+    }
+
+    [PunRPC]
+    public void Number(int cases)
+    {
+        switch (cases)
+        {
+            case 1:
+                RedTeamNumber++;
+                break;
+            case 2:
+                BlueTeamNumber++;
+                break;
+            case 3:
+                RedTeamNumber--;
+                break;
+            case 4:
+                BlueTeamNumber--;
+                break;
+            case 5:
+                playerReady++;
+                break;
+            case 6:
+                playerReady--;
+                break;
+        }
+    }
 }
 

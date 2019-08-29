@@ -18,16 +18,16 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     public SpUI spui;
     float movespeed = 6f;
 
+    PlayerUI playerUI;
     Text ReadyButtonText;
     Rigidbody rg;
     CapsuleCollider col;
-    public GameObject ReadyButton;
     bool isReady;
 
     #region Start() Update()
     void Start()
     {
-        ReadyButton = GameObject.Find("ReadyButton");
+        playerUI = GameObject.Find("PlayerUI " + photonView.Owner.NickName + photonView.ViewID).GetComponent<PlayerUI>();
         ReadyButtonText = GameObject.Find("ReadyButton").GetComponentInChildren<Text>();
         GameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         playerMove = GetComponent<PlayerMove>();
@@ -36,7 +36,6 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         col = GetComponent<CapsuleCollider>();
         rg = GetComponent<Rigidbody>();
         Laying = false;
-        ReadyButton.SetActive(false);
     }
     void FixedUpdate()
     {
@@ -92,20 +91,19 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             }
             if (Input.GetKeyDown(KeyCode.F1) && !GameManager.isStartGame)
             {
-                ReadyButton.SetActive(false);
                 GameManager.playerReady--;
                 ReadyButtonText.text = "準備(R鍵)";
                 ReadyButtonText.color = Color.black;
                 isReady = !isReady;
                 if (gameObject.tag == "RedPlayer")
                 {
-                    GameManager.RedTeamNumber--;
+                    GameManager.photonView.RPC("Number", RpcTarget.All, 3);
                 }
                 if (gameObject.tag == "BluePlayer")
                 {
-                    GameManager.BlueTeamNumber--;
+                    GameManager.photonView.RPC("Number", RpcTarget.All, 4);
                 }
-                GameObject.Find("PlayerUI " + playerManager.photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(255, 255, 255);
+                playerUI.playerNameText.color = new Color(255, 255, 255);
                 gameObject.transform.position = GameObject.Find("StartTp").GetComponent<Transform>().position;
                 SwordTeam.tag = "Sword";
                 gameObject.tag = "Player";
@@ -114,14 +112,14 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             {
                 if (!isReady)
                 {
-                    GameManager.playerReady++;
+                    GameManager.photonView.RPC("Number", RpcTarget.All, 5);
                     ReadyButtonText.text = "已就緒(R鍵)";
                     ReadyButtonText.color = Color.red;
                     isReady = !isReady;
                 }
                 else
                 {
-                    GameManager.playerReady--;
+                    GameManager.photonView.RPC("Number", RpcTarget.All, 6);
                     ReadyButtonText.text = "準備(R鍵)";
                     ReadyButtonText.color = Color.black;
                     isReady = !isReady;
@@ -148,7 +146,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             {
                 transform.Translate(Vector3.up * movespeed * Time.deltaTime, Camera.main.transform);
             }
-            if (Input.GetKey(KeyCode.LeftCommand))
+            if (Input.GetKey(KeyCode.LeftControl))
             {
                 transform.Translate(Vector3.down * movespeed * Time.deltaTime, Camera.main.transform);
             }
@@ -197,20 +195,18 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (other.CompareTag("RedTeam"))
         {
-            GameObject.Find("PlayerUI " + playerManager.photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(255, 0, 0);
+            playerUI.playerNameText.color = new Color(255, 0, 0);
             SwordTeam.tag = "RedSword";
             gameObject.tag = "RedPlayer";
-            GameManager.RedTeamNumber++;
-            ReadyButton.SetActive(true);
+            GameManager.photonView.RPC("Number", RpcTarget.All, 1);
             gameObject.transform.position = GameObject.Find("RedTp").GetComponent<Transform>().position;
         }
         if (other.CompareTag("BlueTeam"))
         {
-            GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(0, 0,255);
+            playerUI.playerNameText.color = new Color(0, 0, 255);
             SwordTeam.tag = "BlueSword";
             gameObject.tag = "BluePlayer";
-            GameManager.BlueTeamNumber++;
-            ReadyButton.SetActive(true);
+            GameManager.photonView.RPC("Number", RpcTarget.All, 2);
             gameObject.transform.position = GameObject.Find("BlueTp").GetComponent<Transform>().position;
         }
     }
@@ -223,22 +219,16 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         {
             stream.SendNext(this.tag);
             stream.SendNext(SwordTeam.tag);
-            stream.SendNext(GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color.r);
-            stream.SendNext(GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color.g);
-            stream.SendNext(GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color.b);
-            stream.SendNext(GameManager.playerReady);
-            stream.SendNext(GameManager.RedTeamNumber);
-            stream.SendNext(GameManager.BlueTeamNumber);
+            stream.SendNext(playerUI.playerNameText.color.r);
+            stream.SendNext(playerUI.playerNameText.color.g);
+            stream.SendNext(playerUI.playerNameText.color.b);
 
         }
         else
         {
             this.tag = (string)stream.ReceiveNext();
             SwordTeam.tag = (string)stream.ReceiveNext();
-            GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
-            GameManager.playerReady = (int)stream.ReceiveNext();
-            GameManager.RedTeamNumber = (int)stream.ReceiveNext();
-            GameManager.BlueTeamNumber = (int)stream.ReceiveNext();
+            playerUI.playerNameText.color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
         }
     }
     #endregion

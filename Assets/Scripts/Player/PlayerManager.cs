@@ -33,6 +33,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             LocalPlayerInstance = gameObject;
         }
+        if (this.playerUiPrefab != null)
+        {
+            GameObject _uiGo = Instantiate(this.playerUiPrefab);
+            _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+            playhp = GameObject.Find("PlayerUI " + photonView.Owner.NickName + photonView.ViewID).GetComponent<RectTransform>();
+        }
     }
 
     private void Start()
@@ -44,13 +50,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
             PlayerUI.SetActive(false);
             VirtualTrack.SetActive(false);
             CMvcam1.SetActive(false);
-        }
-        if (this.playerUiPrefab != null)
-        {
-            GameObject _uiGo = Instantiate(this.playerUiPrefab);
-            _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
-            playhp = GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<RectTransform>();
-
         }
         Lock_Cursor = true;
         IsDead = false;
