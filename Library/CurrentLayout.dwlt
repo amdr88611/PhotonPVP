@@ -115,7 +115,7 @@ MonoBehaviour:
   m_MinSize: {x: 713, y: 498}
   m_MaxSize: {x: 18008, y: 14048}
   vertical: 0
-  controlID: 135
+  controlID: 110
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 348}
   m_MaxSize: {x: 4002, y: 8048}
   vertical: 1
-  controlID: 51
+  controlID: 91
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_MinSize: {x: 234, y: 498}
   m_MaxSize: {x: 10004, y: 14048}
   vertical: 1
-  controlID: 71
+  controlID: 111
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -738,7 +738,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 045cfeff225cfeffe65dfefff45dfeffce6afeffec6afeffac6cfeffb66cfeff3e8dfeff6a8ffeff0c90feff2a90feff1092feff2692feff3c9efeff429efeffe09efefffe9efeffbea0feffcea0feff6eb2feff74b2feff0cb8feff2ab8feffeab9fefff4b9feffe8c5feff06c6feffd2c7feffe8c7feffac61ffffb261ffffbe65ffffc465ffff3ad8ffff5cd8ffff1cdaffff26daffff58f5ffff7cf5ffff62f7ffff82f7ffffd4fbfffff4ffffff
+      m_ExpandedIDs: c8f8ffffe6f8ffffd4faffffe2faffffd4fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -800,20 +800,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Photon/PhotonUnityNetworking/Resources
+    - Assets/Scripts
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Photon/PhotonUnityNetworking/Resources
+  - Assets/Scripts
   m_LastFoldersGridSize: 16
   m_LastProjectPath: D:\AlanLee\Documents\UnityProject\PhotonPVP
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: b6280000
-    m_LastClickedID: 10422
-    m_ExpandedIDs: 000000008c280000fe2800002c2900002e2a0000502a0000742a0000842a0000862a0000282b00005e2b0000d82b000000ca9a3b
+    m_SelectedIDs: 842a0000
+    m_LastClickedID: 10884
+    m_ExpandedIDs: 000000008c280000fe2800002e2a0000502a0000742a0000842a0000862a0000282b00005e2b0000d82b000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -841,7 +841,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000008c280000fe2800002e2a0000502a0000742a0000842a0000862a0000282b00005e2b0000d82b0000
+    m_ExpandedIDs: 000000008c280000fe2800002c2900002e2a0000502a0000742a0000842a0000862a0000282b00005e2b0000d82b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -872,18 +872,18 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: c62300006865ffff8622ffff1e3b00003ab1ffffb4e9ffff482b00002c2c0000545c00006e5d0000e62b000016300000462700005a26000046280000a826000028280000b228000066280000662700002e290000a8290000022700004c28000064280000e85f000002a80000e8a60000cea500001ca900002a280000da51000092380000ce610000de29000000000000a6280000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: PunClasses
-      m_OriginalName: PunClasses
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 8808
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 11}
     m_CreateAssetUtility:
@@ -895,7 +895,7 @@ MonoBehaviour:
     m_NewAssetIndexInList: -1
     m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 16
-  m_DirectoriesAreaWidth: 129
+  m_DirectoriesAreaWidth: 194
 --- !u!114 &21
 MonoBehaviour:
   m_ObjectHideFlags: 52

@@ -8,15 +8,19 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
 {
     private PlayerManager playerManager;
     private GameManager GameManager;
+    private PlayerMove playerMove;
+    public LockObject lockObject;
     public Animator Player_ani;
 
     public BoxCollider Shield, Sword;
     public GameObject sword, SwordTeam;
-    public bool Laying;
-    public bool isAction, isInvincible;
+    public bool Laying, isAction, isInvincible, cantChangeDir;
     public SpUI spui;
+    float movespeed = 6f;
 
     Text ReadyButtonText;
+    Rigidbody rg;
+    CapsuleCollider col;
     public GameObject ReadyButton;
     bool isReady;
 
@@ -28,8 +32,11 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         ReadyButton = GameObject.Find("ReadyButton");
         ReadyButtonText = GameObject.Find("ReadyButton").GetComponentInChildren<Text>();
         GameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        playerMove = GetComponent<PlayerMove>();
         playerManager = GetComponent<PlayerManager>();
         Player_ani = GetComponent<Animator>();
+        col = GetComponent<CapsuleCollider>();
+        rg = GetComponent<Rigidbody>();
         Laying = false;
         ReadyButton.SetActive(false);
     }
@@ -46,92 +53,108 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             SwordTeam.SetActive(false);
         }
         #endregion
-        if (Input.GetMouseButton(1))
+        if (!playerManager.IsDead)
         {
-            Player_ani.SetBool("Block", true);
-        }
-        else
-        {
-            Player_ani.SetBool("Hurt", false);
-            Player_ani.SetBool("Blocking", false);
-            Player_ani.SetBool("Block", false);
-            Shield.enabled = false;
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            /*可以處決時
-            if ()
+            if (Input.GetMouseButton(1))
             {
-                Player_ani.SetBool("DeathAttack", true);
-            }
-            else*/
-            if (Input.GetKey(KeyCode.LeftControl) && playerManager.PlayerSp >= 40)
-            {
-                Player_ani.SetBool("HeavyAttack", true);
-            }
-            else if (playerManager.PlayerSp >= 10)
-            {
-
-                Player_ani.SetBool("Attack", true);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && playerManager.PlayerSp >= 20)
-        {
-            Player_ani.SetBool("Dodge", true);
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Player_ani.SetBool("Throw", true);
-        }
-        if (Input.GetKeyDown(KeyCode.F1) && !GameManager.isStartGame)
-        {
-            ReadyButton.SetActive(false);
-            GameManager.playerReady--;
-            ReadyButtonText.text = "準備(R鍵)";
-            ReadyButtonText.color = Color.black;
-            isReady = !isReady;
-            if (gameObject.tag == "RedPlayer")
-            {
-                GameManager.RedTeamNumber--;
-            }
-            if (gameObject.tag == "BluePlayer")
-            {
-                GameManager.BlueTeamNumber--;
-            }
-            GameObject.Find("PlayerUI " + playerManager.photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(255, 255, 255);
-            gameObject.transform.position = GameObject.Find("StartTp").GetComponent<Transform>().position;
-            SwordTeam.tag = "Sword";
-            gameObject.tag = "Player";
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            if (!isReady)
-            {
-                GameManager.playerReady++;
-                ReadyButtonText.text = "已就緒(R鍵)";
-                ReadyButtonText.color = Color.red;
-                isReady = !isReady;
+                Player_ani.SetBool("Block", true);
             }
             else
             {
+                Player_ani.SetBool("Hurt", false);
+                Player_ani.SetBool("Blocking", false);
+                Player_ani.SetBool("Block", false);
+                Shield.enabled = false;
+            }
+            if (Input.GetMouseButtonDown(0))
+            {
+                /*可以處決時
+                if ()
+                {
+                    Player_ani.SetBool("DeathAttack", true);
+                }
+                else*/
+                if (Input.GetKey(KeyCode.LeftControl) && playerManager.PlayerSp >= 40)
+                {
+                    Player_ani.SetBool("HeavyAttack", true);
+                }
+                else if (playerManager.PlayerSp >= 10)
+                {
+
+                    Player_ani.SetBool("Attack", true);
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.Space) && playerManager.PlayerSp >= 20)
+            {
+                Player_ani.SetBool("Dodge", true);
+            }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                Player_ani.SetBool("Throw", true);
+            }
+            if (Input.GetKeyDown(KeyCode.F1) && !GameManager.isStartGame)
+            {
+                ReadyButton.SetActive(false);
                 GameManager.playerReady--;
                 ReadyButtonText.text = "準備(R鍵)";
                 ReadyButtonText.color = Color.black;
                 isReady = !isReady;
+                if (gameObject.tag == "RedPlayer")
+                {
+                    GameManager.RedTeamNumber--;
+                }
+                if (gameObject.tag == "BluePlayer")
+                {
+                    GameManager.BlueTeamNumber--;
+                }
+                GameObject.Find("PlayerUI " + playerManager.photonView.Owner.NickName).GetComponent<PlayerUI>().playerNameText.color = new Color(255, 255, 255);
+                gameObject.transform.position = GameObject.Find("StartTp").GetComponent<Transform>().position;
+                SwordTeam.tag = "Sword";
+                gameObject.tag = "Player";
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                if (!isReady)
+                {
+                    GameManager.playerReady++;
+                    ReadyButtonText.text = "已就緒(R鍵)";
+                    ReadyButtonText.color = Color.red;
+                    isReady = !isReady;
+                }
+                else
+                {
+                    GameManager.playerReady--;
+                    ReadyButtonText.text = "準備(R鍵)";
+                    ReadyButtonText.color = Color.black;
+                    isReady = !isReady;
+                }
+            }
+            /*
+            if (Laying)
+            {
+                //if() 被處決決判時
+                //Player_ani.SetBool("BeDeathAttacking", true);
+            }
+            被處決判定打到時呼叫
+            public void BeDeathAttack()
+            {
+                Player_ani.SetBool("BeDeathAttack", true);
+            }
+            */
+        }
+        else
+        {
+            rg.useGravity = false;
+            col.enabled = false;
+            if (Input.GetKey(KeyCode.Space))
+            {
+                transform.Translate(Vector3.up * movespeed * Time.deltaTime, Camera.main.transform);
+            }
+            if (Input.GetKey(KeyCode.LeftCommand))
+            {
+                transform.Translate(Vector3.down * movespeed * Time.deltaTime, Camera.main.transform);
             }
         }
-        /*
-        if (Laying)
-        {
-            //if() 被處決決判時
-            //Player_ani.SetBool("BeDeathAttacking", true);
-        }
-        被處決判定打到時呼叫
-        public void BeDeathAttack()
-        {
-            Player_ani.SetBool("BeDeathAttack", true);
-        }
-        */
         if (playerManager.PlayerHp <= 0)
         {
             Player_ani.SetBool("Dead", true);
@@ -250,6 +273,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         {
             SwordTeam.tag = "RedBigSword";
         }
+        isActionTrue();
         playerManager.CoSp(50);
     }
     public void AttackFalse()
@@ -267,10 +291,16 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void DodgeSp()
     {
+        playerMove.CharMove(this.transform, playerMove.PlayerCamera, playerMove.RelativeDir, playerMove.nowSpeed, true);
         Shield.enabled = false;
         sword.SetActive(true);
         isInvincible = true;
-        playerManager.CoSp(20);
+        isActionTrue();
+        //playerManager.CoSp(20);
+    }
+    public void isInvincibleFalse()
+    {
+        isInvincible = false;
     }
     public void DodgingFalse()
     {
@@ -290,14 +320,16 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void Throw()
     {
+        ChangeDir();
         isActionTrue();
         sword.SetActive(false);
     }
     public void AllEnd()
     {
+        cantChangeDir = false;
         Player_ani.SetBool("Hurt", false);
         sword.SetActive(true);
-        isInvincible = false;
+        isInvincibleFalse();
         isAction = false;
         spui.Slow = 1;
         AttackFalse();
@@ -342,6 +374,18 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     {
         sword.SetActive(true);
         Player_ani.SetBool("Die", true);
+    }
+    public void ChangeDir()
+    {
+        if (lockObject.isLock)
+        {
+            this.transform.LookAt(lockObject.inViewTarget[0].transform.position);
+            cantChangeDir = true;
+        }
+        else
+        {
+            playerMove.CharMove(this.transform, playerMove.PlayerCamera, playerMove.RelativeDir, playerMove.nowSpeed, true);
+        }
     }
     #endregion
 }

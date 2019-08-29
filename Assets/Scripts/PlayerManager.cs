@@ -16,8 +16,15 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     public GameObject PlayerMainCamera;
     public GameObject PlayerFreeCamera;
     public GameObject PlayerUI;
+    public SkinnedMeshRenderer playmode1;
+    public SkinnedMeshRenderer playmode2;
+    public SkinnedMeshRenderer playmode3;
+    public SkinnedMeshRenderer playmode4;
+    public RectTransform playhp;
 
+    public bool IsDead;
     bool Lock_Cursor;
+
     public void Awake()
     {
         if (photonView.IsMine)
@@ -38,8 +45,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             GameObject _uiGo = Instantiate(this.playerUiPrefab);
             _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+            playhp = GameObject.Find("PlayerUI " + photonView.Owner.NickName).GetComponent<RectTransform>();
+
         }
         Lock_Cursor = true;
+        IsDead = false;
     }
     private void Update()
     {
@@ -47,7 +57,13 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (this.PlayerHp <= 0f)
             {
-                GameManager.Instance.LeaveRoom();
+                playmode1.enabled = false;
+                playmode2.enabled = false;
+                playmode3.enabled = false;
+                playmode4.enabled = false;
+                playhp.localScale = Vector3.zero;
+                IsDead = true;
+                // GameManager.Instance.LeaveRoom();
             }
             if (Input.GetKeyDown(KeyCode.Tab))
                 Lock_Cursor = !Lock_Cursor;
@@ -85,10 +101,22 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(this.PlayerHp);
+            stream.SendNext(playmode1.enabled);
+            stream.SendNext(playmode2.enabled);
+            stream.SendNext(playmode3.enabled);
+            stream.SendNext(playmode4.enabled);
+            stream.SendNext(playhp.localScale.x);
+            stream.SendNext(playhp.localScale.y);
+            stream.SendNext(playhp.localScale.z);
         }
         else
         {
             this.PlayerHp = (float)stream.ReceiveNext();
+            playmode1.enabled = (bool)stream.ReceiveNext();
+            playmode2.enabled = (bool)stream.ReceiveNext();
+            playmode3.enabled = (bool)stream.ReceiveNext();
+            playmode4.enabled = (bool)stream.ReceiveNext();
+            playhp.localScale = new Vector3((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
         }
     }
 

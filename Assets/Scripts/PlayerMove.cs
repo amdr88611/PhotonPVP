@@ -7,9 +7,12 @@ public class PlayerMove : MonoBehaviourPun
 {
     public PlayerManager playerManager;
     private Animator Player_ani;
-    private float nowSpeed;
-    private Camera PlayerCamera;
+    public float nowSpeed;
+    public Camera PlayerCamera;
     public PlayerAnim player;
+    public LockObject lockObject;
+    public Vector3 RelativeDir;
+    float movespeed = 12f;
     void Start()
     {
         PlayerCamera = Camera.main;
@@ -21,68 +24,85 @@ public class PlayerMove : MonoBehaviourPun
         if (!photonView.IsMine)
             return;
         #endregion
-        Vector3 RelativeDir = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
-        if (Player_ani.GetCurrentAnimatorStateInfo(0).fullPathHash == Animator.StringToHash("Base Layer.Walk") ||
-          Player_ani.GetNextAnimatorStateInfo(0).fullPathHash == Animator.StringToHash("Base Layer.Walk"))
+        if (!playerManager.IsDead)
         {
-            if (Input.GetKey(KeyCode.LeftShift) && playerManager.PlayerSp > 0)
+            RelativeDir = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
+            if (Player_ani.GetCurrentAnimatorStateInfo(0).fullPathHash == Animator.StringToHash("Base Layer.Walk") ||
+              Player_ani.GetNextAnimatorStateInfo(0).fullPathHash == Animator.StringToHash("Base Layer.Walk"))
             {
-                if(nowSpeed < Mathf.Max(Mathf.Abs(Input.GetAxisRaw("Horizontal")), Mathf.Abs(Input.GetAxisRaw("Vertical"))))
+                if (Input.GetKey(KeyCode.LeftShift) && playerManager.PlayerSp > 0)
                 {
-                    nowSpeed += 0.02f;
+                    if (nowSpeed < Mathf.Max(Mathf.Abs(Input.GetAxisRaw("Horizontal")), Mathf.Abs(Input.GetAxisRaw("Vertical"))))
+                    {
+                        nowSpeed += 0.02f;
+                    }
+                    playerManager.CoSp(0.1f);
+                    player.isActionTrue();
                 }
-                playerManager.CoSp(0.1f);
-                player.isActionTrue();
+                else
+                {
+                    if (nowSpeed > 0)
+                    {
+                        nowSpeed -= 0.02f;
+                    }
+                    if (!Input.GetKey(KeyCode.LeftShift))
+                    {
+                        player.isAction = false;
+                    }
+                }
+                //Debug.Log(RelativeDir + "/");
+                //Debug.Log("Right");
+                if(!player.cantChangeDir)
+                    CharMove(this.transform, PlayerCamera, RelativeDir, nowSpeed, false);
+                Player_ani.SetFloat("Speed", nowSpeed);
             }
             else
             {
-                if(nowSpeed > 0)
+                if (nowSpeed > 0)
                 {
-                    nowSpeed -= 0.02f;
-                }
-                if (!Input.GetKey(KeyCode.LeftShift))
-                {
-                    player.isAction = false;
+                    nowSpeed = 0;
+                    Player_ani.SetFloat("Speed", nowSpeed);
                 }
             }
-            Debug.Log(RelativeDir + "/");
-            Debug.Log("Right");
-            CharMove(this.transform, PlayerCamera, RelativeDir, nowSpeed,false);
-            Player_ani.SetFloat("Speed", nowSpeed);
-        }
-        else
-        {
-            if (nowSpeed > 0)
+            if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
             {
-                nowSpeed = 0;
-                Player_ani.SetFloat("Speed", nowSpeed);
+                Player_ani.SetBool("Walk", true);
             }
-        }
-        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
-        {
-            Player_ani.SetBool("Walk", true);
+            else
+            {
+                Player_ani.SetBool("Walk", false);
+            }
         }
         else
         {
-            Player_ani.SetBool("Walk", false);
-        }
-        if(Input.GetKeyDown(KeyCode.Space) && playerManager.PlayerSp >= 20 
-            && Player_ani.GetCurrentAnimatorStateInfo(0).fullPathHash != Animator.StringToHash("Base Layer.Roll")
-            && Player_ani.GetCurrentAnimatorStateInfo(0).fullPathHash != Animator.StringToHash("Base Layer.RollEnd"))
-        {
-            CharMove(this.transform, PlayerCamera, RelativeDir, nowSpeed, true);
+            if (Input.GetKey(KeyCode.W))
+            {
+                transform.Translate(Vector3.forward * movespeed * Time.deltaTime, Camera.main.transform);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                transform.Translate(Vector3.back * movespeed * Time.deltaTime, Camera.main.transform);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Translate(Vector3.left * movespeed * Time.deltaTime, Camera.main.transform);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Translate(Vector3.right * movespeed * Time.deltaTime, Camera.main.transform);
+            }
         }
     }
-    public void CharMove(Transform CharTarget, Camera Cam, Vector3 Direct, float Speed,bool IsDoge)
+    public void CharMove(Transform CharTarget, Camera Cam, Vector3 Direct, float Speed, bool IsMoving)
     {
         Vector3 CamForward = Cam.transform.forward;
         Vector3 CamRight = Cam.transform.right;
         Vector3 CamCoordToWorldCoord_Dir = new Vector3(Direct.x * CamForward.x + Direct.z * CamRight.x, 0,
             Direct.z * CamRight.z + Direct.x * CamForward.z);
         CamCoordToWorldCoord_Dir.Normalize();
-        Debug.Log(CamCoordToWorldCoord_Dir);
+        //Debug.Log(CamCoordToWorldCoord_Dir);
 
-        if (!IsDoge)
+        if (!IsMoving)
         {
             CharTarget.LookAt
             (
@@ -91,7 +111,7 @@ public class PlayerMove : MonoBehaviourPun
             );
             CharTarget.position += CamCoordToWorldCoord_Dir * (3 + Speed * 3) * Time.deltaTime;
         }
-        else if (IsDoge)
+        else if (IsMoving)
         {
             CharTarget.LookAt(CharTarget.position + CamCoordToWorldCoord_Dir);
         }

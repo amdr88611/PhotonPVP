@@ -202,15 +202,15 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.42156726
-        functionName: DodgingTrue
+      - time: 0
+        functionName: ChangeDir
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.73817545
-        functionName: DodgingFalse
+      - time: 0.42156726
+        functionName: DodgingTrue
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -223,6 +223,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.56684494
+        functionName: ComboSp
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.71657753
         functionName: SwordFalse
         data: 
@@ -230,8 +237,8 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.56684494
-        functionName: ComboSp
+      - time: 0.73817545
+        functionName: DodgingFalse
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -272,15 +279,15 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.29333326
-        functionName: DodgingTrue
+      - time: 0
+        functionName: ChangeDir
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.627579
-        functionName: DodgingFalse
+      - time: 0.29333326
+        functionName: DodgingTrue
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -293,6 +300,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.32887697
+        functionName: ComboSp
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.49465248
         functionName: SwordFalse
         data: 
@@ -300,8 +314,8 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.32887697
-        functionName: ComboSp
+      - time: 0.627579
+        functionName: DodgingFalse
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -365,6 +379,13 @@ ModelImporter:
         messageOptions: 0
       - time: 0.37700543
         functionName: ComboSp
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: ChangeDir
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

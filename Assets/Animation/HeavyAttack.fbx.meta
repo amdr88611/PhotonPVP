@@ -197,7 +197,7 @@ ModelImporter:
       curves: []
       events:
       - time: 0
-        functionName: isActionTrue
+        functionName: ChangeDir
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
