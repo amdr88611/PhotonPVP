@@ -23,6 +23,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     Text ReadyButtonText;
     Rigidbody rg;
     CapsuleCollider col;
+    BoxCollider boxc;
     bool isReady;
     public bool throwing;
     private int FlySwordCount;
@@ -44,6 +45,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         playerManager = GetComponent<PlayerManager>();
         Player_ani = GetComponent<Animator>();
         col = GetComponent<CapsuleCollider>();
+        boxc = GetComponent<BoxCollider>();
         rg = GetComponent<Rigidbody>();
     }
     void FixedUpdate()
@@ -75,6 +77,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
             //
             if (Input.GetMouseButtonDown(0))
             {
+                canDeathATK = false;
                 canDeathAttack.Clear();
                 nearPlayer = Physics.OverlapSphere(transform.position, 1, LayerMask.GetMask("Player"));
                 for (int i = 0; i < nearPlayer.Length; i++)
@@ -101,18 +104,8 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
                 }
                 if (canDeathATK)
                 {
-                    isInvincible = true;
-                    transform.LookAt(canDeathAttack[0].transform);
                     Player_ani.SetBool("DeathAttack", true);
-                    if (SwordTeam.tag.Contains("Blue"))
-                    {
-                        SwordTeam.tag = "BlueDeathSword";
-                    }
-                    else if (SwordTeam.tag.Contains("Red"))
-                    {
-                        SwordTeam.tag = "RedDeathSword";
-                    }
-                    canDeathATK = false;
+                    transform.LookAt(canDeathAttack[0].transform);
                 }
                 else
                 {
@@ -237,11 +230,11 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
                 Player_ani.SetBool("KnockDown", true);
                 playerManager.CoHp(20);
             }
-            else if (other.CompareTag("BlueDeathSword"))
+            else if (other.CompareTag("BlueDeathSword") && isInvincible)
             {
                 Player_ani.SetBool("Hurt", true);
                 Laying = false;
-                playerManager.CoHp(40);
+                playerManager.CoHp(30);
             }
         }
         else if (gameObject.tag == "BluePlayer")
@@ -257,11 +250,11 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
                 Player_ani.SetBool("KnockDown", true);
                 playerManager.CoHp(20);
             }
-            else if (other.CompareTag("BlueDeathSword"))
+            else if (other.CompareTag("RedDeathSword") && isInvincible)
             {
                 Player_ani.SetBool("Hurt", true);
                 Laying = false;
-                playerManager.CoHp(40);
+                playerManager.CoHp(30);
             }
         }
         if (other.CompareTag("RedTeam"))
@@ -356,7 +349,7 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         sword.SetActive(true);
         isInvincible = true;
         isActionTrue();
-        //playerManager.CoSp(20);
+        playerManager.CoSp(20);
     }
     public void isInvincibleFalse()
     {
@@ -396,7 +389,6 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         AttackFalse();
         DodgingFalse();
         DeathAttackFalse();
-        //Player_ani.SetBool("BeDeathAttack", false);
         Player_ani.SetBool("KnockDownIng", false);
         Player_ani.SetBool("Throw", false);
         throwing = false;
@@ -408,6 +400,19 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
         Player_ani.SetBool("Blocking", true);
         Shield.enabled = true;
         DodgingFalse();
+    }
+    public void DeathAttack()
+    {
+        isInvincible = true;
+        transform.LookAt(canDeathAttack[0].transform);
+        if (SwordTeam.tag.Contains("Blue"))
+        {
+            SwordTeam.tag = "BlueDeathSword";
+        }
+        else if (SwordTeam.tag.Contains("Red"))
+        {
+            SwordTeam.tag = "RedDeathSword";
+        }
     }
     public void DeathAttackFalse()
     {
@@ -426,12 +431,15 @@ public class PlayerAnim : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void LayingTrue()
     {
+        boxc.enabled = true;
+        col.enabled = false;
         Laying = true;
     }
     public void StandUp()
     {
+        boxc.enabled = false;
+        col.enabled = true;
         Player_ani.SetBool("Hurt", false);
-        //Player_ani.SetBool("BeDeathAttacking", false);
         Laying = false;
     }
     public void Die()

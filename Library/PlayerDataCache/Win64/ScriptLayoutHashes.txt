@@ -1,6 +1,6 @@
 Win64
 PlayerPath?
-V:/108-育達-多遊-陳廷岳/Test/PhotonPVP.exe
+C:/Users/Intern/Desktop/TEST/PhotonPVP.exe
 SceneListBegin?
 Assets/Scenes/Start.unity
 Assets/Scenes/Game.unity

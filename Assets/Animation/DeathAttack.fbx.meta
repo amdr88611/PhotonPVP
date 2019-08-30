@@ -194,20 +194,27 @@ ModelImporter:
       curves: []
       events:
       - time: 0
+        functionName: DeathAttack
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
         functionName: DodgingTrue
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.39037874
+      - time: 0.5319172
         functionName: SwordTrue
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.5631411
+      - time: 0.6708334
         functionName: SwordFalse
         data: 
         objectReferenceParameter: {instanceID: 0}
