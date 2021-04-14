@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool isStartGame;
 
     private bool esc;
+    bool Lock_Cursor;
 
     #endregion
 
@@ -87,6 +88,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            Lock_Cursor = !Lock_Cursor;
             if (esc)
             {
                 esc = false;
@@ -105,6 +107,16 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             {
                 RedWinWindows.SetActive(true);
             }
+        }
+        if (Lock_Cursor)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 
@@ -143,6 +155,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public void StartGame()
     {
         PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene(0);
     }
     #endregion
 
